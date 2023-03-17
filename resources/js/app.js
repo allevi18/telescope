@@ -6,7 +6,6 @@ import VueRouter from 'vue-router'
 import VueJsonPretty from 'vue-json-pretty'
 import 'vue-json-pretty/lib/styles.css'
 import moment from 'moment-timezone'
-import VCalendar from 'v-calendar'
 
 require('bootstrap')
 
@@ -42,8 +41,6 @@ Vue.component('related-entries', require('./components/RelatedEntries.vue').defa
 Vue.component('index-screen', require('./components/IndexScreen.vue').default)
 Vue.component('preview-screen', require('./components/PreviewScreen.vue').default)
 Vue.component('alert', require('./components/Alert.vue').default)
-
-Vue.use(VCalendar, {})
 
 Vue.mixin(Base)
 
@@ -81,37 +78,37 @@ new Vue({
             }
         },
 
-        applyFilters() {
+        applyFilters () {
             if (this.filterStartDateTime.length || this.filterEndDateTime.length) {
-                this.filtersApplied = 1;
+                this.filtersApplied = 1
             } else {
-                this.filtersApplied = 0;
+                this.filtersApplied = 0
             }
 
             this.$router
                 .push({ query: _.assign({}, this.$route.query, { filterStartDateTime: this.filterStartDateTime }) })
-                .catch((err) => {});
+                .catch((err) => {})
             this.$router
                 .push({ query: _.assign({}, this.$route.query, { filterEndDateTime: this.filterEndDateTime }) })
-                .catch((err) => {});
+                .catch((err) => {})
         },
 
-        clearFilters() {
-            this.filtersApplied = 0;
-            this.filterStartDateTime = '';
-            this.filterEndDateTime = '';
+        clearFilters () {
+            this.filtersApplied = 0
+            this.filterStartDateTime = ''
+            this.filterEndDateTime = ''
 
-            this.applyFilters();
+            this.applyFilters()
         },
 
-        adjustFiltersApplied() {
-            this.filterStartDateTime = this.$route.query.filterStartDateTime || '';
-            this.filterEndDateTime = this.$route.query.filterEndDateTime || '';
+        adjustFiltersApplied () {
+            this.filterStartDateTime = this.$route.query.filterStartDateTime || ''
+            this.filterEndDateTime = this.$route.query.filterEndDateTime || ''
 
             if (this.filterStartDateTime.length || this.filterEndDateTime.length) {
-                this.filtersApplied = 1;
+                this.filtersApplied = 1
             } else {
-                this.filtersApplied = 0;
+                this.filtersApplied = 0
             }
         },
 
@@ -122,12 +119,12 @@ new Vue({
             this.recording = !this.recording
         },
 
-        mounted() {
-            this.adjustFiltersApplied();
+        mounted () {
+            this.adjustFiltersApplied()
         },
         watch: {
-            $route() {
-                this.adjustFiltersApplied();
+            $route () {
+                this.adjustFiltersApplied()
             },
         },
 

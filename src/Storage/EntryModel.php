@@ -65,13 +65,32 @@ class EntryModel extends Model
     public function scopeWithTelescopeOptions($query, $type, EntryQueryOptions $options)
     {
         $this->whereType($query, $type)
-                ->whereBatchId($query, $options)
-                ->whereTag($query, $options)
-                ->whereFamilyHash($query, $options)
-                ->whereBeforeSequence($query, $options)
-                ->filter($query, $options);
+            ->whereBatchId($query, $options)
+            ->whereTag($query, $options)
+            ->whereFilterDates($query, $options)
+            ->whereFamilyHash($query, $options)
+            ->whereBeforeSequence($query, $options)
+            ->filter($query, $options);
 
         return $query;
+    }
+
+    protected function whereFilterDates($query, EntryQueryOptions $options)
+    {
+        if ($options->filterStartDateTime) {
+            $query->when($options->filterStartDateTime, function ($query) use ($options) {
+                return $query->where('created_at', '>',
+                    Carbon::parse($options->filterStartDateTime)->toDateTimeString());
+            });
+        }
+
+        if ($options->filterEndDateTime) {
+            $query->when($options->filterEndDateTime, function ($query) use ($options) {
+                return $query->where('created_at', '<', Carbon::parse($options->filterEndDateTime)->toDateTimeString());
+            });
+        }
+
+        return $this;
     }
 
     /**

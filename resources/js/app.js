@@ -63,7 +63,9 @@ new Vue({
             },
 
             autoLoadsNewEntries: localStorage.autoLoadsNewEntries === '1',
-            filtersEntriesByDate: localStorage.filtersEntriesByDate === '1',
+            filtersApplied: this.adjustFiltersApplied(),
+            filterStartDateTime: this.$route.query.filterStartDateTime ?? null,
+            filterEndDateTime: this.$route.query.filterEndDateTime ?? null,
             recording: Telescope.recording,
         }
     },
@@ -79,13 +81,37 @@ new Vue({
             }
         },
 
-        filterEntriesByDate () {
-            if (!this.filtersEntriesByDate) {
-                this.filtersEntriesByDate = true
-                localStorage.filtersEntriesByDate = 1
+        applyFilters() {
+            if (this.filterStartDateTime.length || this.filterEndDateTime.length) {
+                this.filtersApplied = 1;
             } else {
-                this.filtersEntriesByDate = false
-                localStorage.filtersEntriesByDate = 0
+                this.filtersApplied = 0;
+            }
+
+            this.$router
+                .push({ query: _.assign({}, this.$route.query, { filterStartDateTime: this.filterStartDateTime }) })
+                .catch((err) => {});
+            this.$router
+                .push({ query: _.assign({}, this.$route.query, { filterEndDateTime: this.filterEndDateTime }) })
+                .catch((err) => {});
+        },
+
+        clearFilters() {
+            this.filtersApplied = 0;
+            this.filterStartDateTime = '';
+            this.filterEndDateTime = '';
+
+            this.applyFilters();
+        },
+
+        adjustFiltersApplied() {
+            this.filterStartDateTime = this.$route.query.filterStartDateTime || '';
+            this.filterEndDateTime = this.$route.query.filterEndDateTime || '';
+
+            if (this.filterStartDateTime.length || this.filterEndDateTime.length) {
+                this.filtersApplied = 1;
+            } else {
+                this.filtersApplied = 0;
             }
         },
 
@@ -94,6 +120,15 @@ new Vue({
 
             window.Telescope.recording = !Telescope.recording
             this.recording = !this.recording
+        },
+
+        mounted() {
+            this.adjustFiltersApplied();
+        },
+        watch: {
+            $route() {
+                this.adjustFiltersApplied();
+            },
         },
 
         clearEntries () {

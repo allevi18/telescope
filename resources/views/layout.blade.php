@@ -56,17 +56,34 @@
                 </svg>
             </button>
 
-            <v-date-picker
-                mode='range'
-                v-model="range"
-                :popover="{ placement: 'bottom', visibility: 'click' }">
-                <button class="btn btn-outline-primary mr-3" :class="{active: filtersEntriesByDate}" v-on:click.prevent="filterEntriesByDate" title="Filter entries by date range">
-                    <svg class="bi bi-calendar3" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z"/>
-                        <path fill-rule="evenodd" d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+            <div class="btn-group" role="group">
+                <button style="border-radius:0.25rem;" class="btn btn-outline-primary ml-auto" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{active: filtersApplied}" title="Filter results">
+                    <svg class="bi bi-calendar3-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2H0z"/>
+                        <path fill-rule="evenodd" d="M0 3h16v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm6.5 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm4-1a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm2 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-8 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm2 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm4-1a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm2 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-8 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm2 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm4-1a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
                     </svg>
                 </button>
-            </v-date-picker>
+                <div class="dropdown-menu dropdown-menu-right mt-2">
+                    <div class="pt-3 pl-3 pr-3 pb-0">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label for="filter-start-datetime">Starting at</label>
+                                    <input id="filter-start-datetime" type="datetime-local" class="form-control" v-model="filterStartDateTime" />
+                                </div>
+                                <div class="col-sm-12 mt-2">
+                                    <label for="filter-end-datetime">Ending at</label>
+                                    <input id="filter-end-datetime" type="datetime-local" class="form-control" v-model="filterEndDateTime" />
+                                </div>
+                                <div class="col-sm-12 mt-3">
+                                    <button class="btn btn-primary float-right" v-on:click.prevent="applyFilters">Apply</button>
+                                    <button class="btn float-right mr-2" v-on:click.prevent="clearFilters">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <router-link to="/monitored-tags" class="btn btn-muted d-flex align-items-center py-2" title="Monitoring">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="icon" fill="currentColor">
